@@ -14,13 +14,13 @@ const theme = createTheme({
     },
     text: {
       primary: 'red',
-      secondary: '#94a1b2',  
+      secondary: '#94a1b2',
+    },
     background: {
       default: '#16161a',
       paper: '#2cb67d'
     },
-  },
-}
+  }
 });
 
 export default theme;
