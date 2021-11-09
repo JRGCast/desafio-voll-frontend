@@ -1,0 +1,15 @@
+.NavToolBar {
+  display: flex;
+  justify-content: space-between; 
+  margin: 0 auto; 
+  width: 50%;
+}
+
+.NavLink {
+  color: white;
+  text-decoration: none 
+}
+
+.NavLink:hover {
+  color: black;
+}
