@@ -1,7 +1,7 @@
 import { LinearProgress } from '@material-ui/core';
 import { lazy, Suspense } from 'react';
 import NavBar from './components/NavBar';
-const Routes = lazy(() => import('./routes/Routes'));
+const AppRoutes = lazy(() => import('./routes/Routes'));
 
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
       <section style={ { marginTop: '7em' } }>
         <section>
           <Suspense fallback={ <LinearProgress /> }>
-            <Routes />
+            <AppRoutes />
           </Suspense >
         </section>
       </section>
