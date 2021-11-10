@@ -16,7 +16,7 @@ const NavBar = () => {
     );
   });
   return (
-    <AppBar color='secondary'>
+    <AppBar className='NavAppBar'>
       <Toolbar className='NavToolBar'>
         { navLinksGen }
       </Toolbar>

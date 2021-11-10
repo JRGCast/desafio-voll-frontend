@@ -11,20 +11,18 @@ function App() {
         height: '100%',
         width: '100%'
       } }>
-      <header>
+      <header >
         <nav>
           <NavBar />
         </nav>
       </header>
-      <main style={ {
-        marginTop: '50em'
-      } }>
+      <section style={ { marginTop: '7em' } }>
         <section>
           <Suspense fallback={ <LinearProgress /> }>
             <Routes />
           </Suspense >
         </section>
-      </main>
+      </section>
     </div>
   );
 }

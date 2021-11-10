@@ -1,5 +1,18 @@
+:root {
+  --main-bg-color: #fffffe;
+  --main-title-color: #094067;
+  --main-text-color: #5f6c7b;
+  --main-text-hover-color: #094067;
+  --main-component-inside-text-color: #fffffe;
+  --main-button-bg-color: #3da9fc;
+  --main-button-font-color: #fffffe;
+  --main-ilustration-hightlight: #3da9fc;
+  --secondary-ilustration-color: #90b4ce;
+  --tertiary-ilustration-color: #ef4565;
+}
+
 html {
-  background-color: #16161a;
+  background-color: var(--main-bg-color);
 }
 body {
   margin: 0;

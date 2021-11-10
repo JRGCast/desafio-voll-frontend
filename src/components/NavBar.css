@@ -1,15 +1,24 @@
+.NavAppBar {
+  margin-bottom: 1em
+}
+
 .NavToolBar {
   display: flex;
+  height: 3em;
   justify-content: space-between; 
   margin: 0 auto; 
   width: 50%;
 }
 
 .NavLink {
-  color: white;
-  text-decoration: none 
+  border-radius: 10px;
+  color: var(--main-component-inside-text-color);
+  padding: 0.3em;
+  text-decoration: none; 
+  transition: 0.2s
 }
 
 .NavLink:hover {
-  color: black;
+  color: var(--main-text-hover-color);
+  background-color: var(--main-bg-color);
 }
