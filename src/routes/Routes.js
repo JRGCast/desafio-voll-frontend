@@ -7,8 +7,6 @@ import { landingPageUrl, loginPageUrl, registerPageUrl } from '../utils/internal
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path={ loginPageUrl } element={ <LoginPage /> }></Route>
-      <Route path={ registerPageUrl } element={ <RegisterPage /> }></Route>
       <Route path={ landingPageUrl } element={ <LandingPage /> }></Route>
       <Route exact path='/' element={ <Navigate to={ landingPageUrl } /> }></Route>
     </Routes>

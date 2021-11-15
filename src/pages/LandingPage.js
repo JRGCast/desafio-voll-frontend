@@ -48,8 +48,6 @@ const LandingPage = () => {
 
       </section>
       <div style={ { alignItems: 'center', display: 'flex', justifyContent: 'space-between', margin: '0 auto', width: '50%' } }>
-        <Link to={ loginPageUrl }>Login</Link>
-        <Link to={ registerPageUrl }>Registrar</Link>
       </div>
     </main>
   );
