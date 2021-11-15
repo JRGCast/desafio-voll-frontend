@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { loginPageUrl, registerPageUrl } from "../utils/internalUrls";
+import { loginPageUrl } from "../utils/internalUrls";
 
 
 const LandingPage = () => {
@@ -48,6 +48,7 @@ const LandingPage = () => {
 
       </section>
       <div style={ { alignItems: 'center', display: 'flex', justifyContent: 'space-between', margin: '0 auto', width: '50%' } }>
+        <Link to={ loginPageUrl }>Ir para o chat</Link>
       </div>
     </main>
   );
