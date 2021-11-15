@@ -2,6 +2,7 @@ import { LinearProgress } from '@material-ui/core';
 import { lazy, Suspense } from 'react';
 import NavBar from './components/NavBar';
 const AppRoutes = lazy(() => import('./routes/Routes'));
+require('dotenv').config()
 
 
 function App() {
