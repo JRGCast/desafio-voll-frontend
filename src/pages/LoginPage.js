@@ -1,11 +1,13 @@
 import { Avatar, Button, Grid, Paper, TextField } from "@material-ui/core";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const LoginPage = () => {
   const [nickname, setNickname] = useState('');
+  const navigate = useNavigate();
 
   const submitNickName = () => {
-    console.log(nickname);
+    navigate('/')
   };
   const handleInputChange = ({ target: { value } }) => {
     setNickname(value);
