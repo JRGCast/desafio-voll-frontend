@@ -9,7 +9,7 @@ const AppRoutes = () => {
     <Routes>
       <Route path={ loginPageUrl } element={ <LoginPage /> }></Route>
       <Route path={ landingPageUrl } element={ <LandingPage /> }></Route>
-      <Route path={ chatPageUrl } element={ <ChatPage /> }></Route>
+      <Route path={ `${chatPageUrl}/:username` } element={  <ChatPage /> }></Route>
       <Route exact path='/' element={ <Navigate to={ landingPageUrl } /> }></Route>
     </Routes>
   );

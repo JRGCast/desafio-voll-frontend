@@ -1,18 +1,97 @@
+import { Box, Button, Paper, TextField } from "@material-ui/core";
+import { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router";
 import socketClient from 'socket.io-client';
+import './Chatting.css';
 const SERVER = process.env.REACT_APP_CONNECTION_PORT;
-
+const EXTERNAL_SERVER = process.env.REACT_APP_BACK_URL;
+let socket;
 
 
 const Chatting = () => {
-  const socket = socketClient(`http://localhost:${SERVER}`);
+  const [socketConnected, setSocketConnected] = useState(false);
+  const [uname, setUname] = useState('');
+  const dateTimeRef = useRef(null);
 
-  socket.on('connection', () => {
-    console.log(`I'm connected with the back-end`);
-});
+  const { username } = useParams();
+
+  useEffect(() => {
+    socket = socketClient(EXTERNAL_SERVER);
+    setSocketConnected(true);
+  }, []);
+
+  useEffect(() => {
+    if (socketConnected) {
+      socket.on('connection', () => {
+        socket.emit('setName', `${username}${socket.id.slice(0, 3)}`);
+        socket.emit('getMessages');
+      });
+      socket.on('setName', (pongname) => setUname(pongname));
+    }
+  }, [socketConnected, username]);
+
+  useEffect(() => {
+    if(socketConnected) {
+      socket.on('confirmInsert', (data) => console.log(data));
+    }
+  })
+
+  useEffect(() => {
+    const secondsTimer = setInterval(() => {
+      if (dateTimeRef.current) {
+        const date = new Date().toLocaleString('pt-br', { dateStyle: 'short' });
+        const time = new Date().toLocaleString('pt-br', { timeStyle: 'medium' });
+        dateTimeRef.current.innerText = `${date} - ${time}`;
+      }
+    }, 1000);
+    return () => clearInterval(secondsTimer);
+  }, []);
+
+  const generateLi = () => {
+    const msgInput = document.getElementById('msg-input');
+    const msgBox = document.getElementById('msg-box');
+    const newMsg = document.createElement('li');
+    const fullMessage = `${uname} (${dateTimeRef.current.innerText}) disse: ${msgInput.value}`;
+    socket.emit('newMessage', fullMessage);
+    newMsg.appendChild(document.createTextNode(fullMessage));
+    msgBox.appendChild(newMsg);
+    msgInput.value = '';
+    msgInput.scrollIntoView();
+  };
+
+  const inputKeyPress = (e) => {
+    if (e.key === 'Enter') generateLi();
+  };
+
+  const titleStyle = !uname ?
+    { background: 'grey', textAlign: 'center', margin: '0 auto', color: 'whitesmoke' } :
+    { background: 'green', textAlign: 'center', margin: '0 auto', color: 'whitesmoke' };
 
   return (
     <section>
-      <button onClick={ () => console.log(socket) }>Console</button>
+      <p ref={ dateTimeRef }></p>
+      <Box>
+        <Paper variant='outlined'>
+          <h2 className='connected-title'
+            style={ titleStyle }
+          >{ !uname ? 'Aguardando conexão com o servidor...'
+            : `Conectado como ${uname}` }</h2>
+          <Paper
+            id='msg-box'
+            className='message-box'
+            elevation={ 3 }
+          />
+        </Paper>
+      </Box>
+      <TextField
+        id='msg-input'
+        style={ { margin: '0.5em auto' } }
+        onKeyPress={ (e) => inputKeyPress(e) }
+        placeholder='Digite sua mensagem'
+        fullWidth>
+      </TextField>
+      <Button variant='contained'
+        onClick={ generateLi }>ENVIAR</Button>
     </section>);
 };
 

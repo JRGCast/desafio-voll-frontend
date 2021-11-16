@@ -1,13 +1,13 @@
 import { Avatar, Button, Grid, Paper, TextField } from "@material-ui/core";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [nickname, setNickname] = useState('');
   const navigate = useNavigate();
 
   const submitNickName = () => {
-    navigate('/')
+    navigate(`/chatpage/${nickname}`, { state: { username: nickname } });
   };
   const handleInputChange = ({ target: { value } }) => {
     setNickname(value);
