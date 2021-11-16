@@ -1,10 +1,10 @@
-import io from 'socket.io-client';
-// const SERVER = process.env.REACT_APP_CONNECTION_PORT;
+import socketClient from 'socket.io-client';
+const SERVER = process.env.REACT_APP_CONNECTION_PORT;
 
 
 
 const Chatting = () => {
-  const socket = io('http://localhost:3001');
+  const socket = socketClient(`http://localhost:${SERVER}`);
 
   socket.on('connection', () => {
     console.log(`I'm connected with the back-end`);
