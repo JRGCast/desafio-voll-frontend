@@ -10,6 +10,7 @@ let socket;
 
 const Chatting = () => {
   const [socketConnected, setSocketConnected] = useState(false);
+  const [allMessages, setAllMessages] = useState([]);
   const [uname, setUname] = useState('');
   const dateTimeRef = useRef(null);
 
@@ -24,17 +25,18 @@ const Chatting = () => {
     if (socketConnected) {
       socket.on('connection', () => {
         socket.emit('setName', `${username}${socket.id.slice(0, 3)}`);
-        socket.emit('getMessages');
+        socket.emit('getAllMessages', (allMessages) => setAllMessages(allMessages));
       });
       socket.on('setName', (pongname) => setUname(pongname));
     }
   }, [socketConnected, username]);
 
   useEffect(() => {
-    if(socketConnected) {
+    if (socketConnected) {
       socket.on('confirmInsert', (data) => console.log(data));
+      socket.on('chatMessage', (message) => console.log(message));
     }
-  })
+  });
 
   useEffect(() => {
     const secondsTimer = setInterval(() => {
@@ -92,6 +94,7 @@ const Chatting = () => {
       </TextField>
       <Button variant='contained'
         onClick={ generateLi }>ENVIAR</Button>
+        <Button onClick={() => socket.emit('resetDB')}>RESET DB</Button>
     </section>);
 };
 
