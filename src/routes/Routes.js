@@ -12,6 +12,7 @@ const AppRoutes = () => {
       <Route path={ landingPageUrl } element={ <LandingPage /> }></Route>
       <Route path={ `${chatPageUrl}/:username` } element={ <ChatPage /> }></Route>
       <Route exact path='/' element={ <Navigate to={ landingPageUrl } /> }></Route>
+      <Route path='/404' element={ <NotFoundPage /> } />
       <Route path='*' element={ <NotFoundPage /> } />
     </Routes>
   );
