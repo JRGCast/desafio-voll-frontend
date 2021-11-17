@@ -133,7 +133,6 @@ const Chatting = () => {
       <Button variant='contained'
         onClick={ generateLi }>ENVIAR</Button>
       <Button onClick={ () => socket.emit('resetDB') }>RESET DB</Button>
-      <button type='button' onClick={ () => console.log(allConnected) }>Messages Console</button>
     </section>);
 };
 
