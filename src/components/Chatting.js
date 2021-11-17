@@ -3,8 +3,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import socketClient from 'socket.io-client';
 import './Chatting.css';
-const SERVER = process.env.REACT_APP_CONNECTION_PORT;
-const localUrl = `http://localhost:${SERVER}`;
+// const SERVER = process.env.REACT_APP_CONNECTION_PORT;
+// const localUrl = `http://localhost:${SERVER}`;
 const EXTERNAL_SERVER = process.env.REACT_APP_BACK_URL;
 let socket;
 
@@ -15,11 +15,10 @@ const Chatting = () => {
   const [allConnected, setAllConnected] = useState([]);
   const [uname, setUname] = useState('');
   const dateTimeRef = useRef(null);
-  console.log(localUrl);
   const { username } = useParams();
 
   useEffect(() => {
-    socket = socketClient(localUrl);
+    socket = socketClient(EXTERNAL_SERVER);
     setSocketConnected(true);
   }, []);
 
