@@ -7,7 +7,6 @@ const ChatPage = () => {
   return (
     <main>
       <h1>Bem-vindo ao Chat { username }</h1>
-      <button type='button' onClick={ () => console.log(username) }>Console UserName</button>
       <Chatting />
     </main>);
 };

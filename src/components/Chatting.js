@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import socketClient from 'socket.io-client';
 import './Chatting.css';
 const SERVER = process.env.REACT_APP_CONNECTION_PORT;
+const localUrl = `http://localhost:${SERVER}`;
 const EXTERNAL_SERVER = process.env.REACT_APP_BACK_URL;
 let socket;
 
@@ -11,13 +12,14 @@ let socket;
 const Chatting = () => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [allMessages, setAllMessages] = useState([]);
+  const [allConnected, setAllConnected] = useState([]);
   const [uname, setUname] = useState('');
   const dateTimeRef = useRef(null);
 
   const { username } = useParams();
 
   useEffect(() => {
-    socket = socketClient(EXTERNAL_SERVER);
+    socket = socketClient(localUrl);
     setSocketConnected(true);
   }, []);
 
@@ -25,9 +27,12 @@ const Chatting = () => {
     if (socketConnected) {
       socket.on('connection', () => {
         socket.emit('setName', `${username}${socket.id.slice(0, 3)}`);
-        socket.emit('getAllMessages', (allMessages) => setAllMessages(allMessages));
+        socket.emit('getAllMessages');
+        socket.emit('getAllConnected');
       });
       socket.on('setName', (pongname) => setUname(pongname));
+      socket.on('getAllMessages', (allMessages) => setAllMessages(allMessages));
+      socket.on('getAllConnected', (allConnected) => setAllConnected(allConnected));
     }
   }, [socketConnected, username]);
 
@@ -37,6 +42,18 @@ const Chatting = () => {
       socket.on('chatMessage', (message) => console.log(message));
     }
   });
+
+  useEffect(() => {
+    if (socketConnected) {
+      socket.on('chatMessage', (message) => {
+        const msgBox = document.getElementById('msg-box');
+        const newMsg = document.createElement('li');
+        const fullMessage = message;
+        newMsg.appendChild(document.createTextNode(fullMessage));
+        msgBox.appendChild(newMsg);
+      });
+    }
+  }, [socketConnected, allMessages]);
 
   useEffect(() => {
     const secondsTimer = setInterval(() => {
@@ -65,6 +82,18 @@ const Chatting = () => {
     if (e.key === 'Enter') generateLi();
   };
 
+  const dbMessages = () => {
+    if (allMessages.length > 0) {
+      return allMessages.map(({ message }, index) => <li key={ index }>{ message }</li>);
+    }
+  };
+
+  const theConnected = () => {
+    if (allConnected.length > 0) {
+      return allConnected.map(({ givenName }, index) => <li key={ index }>{ givenName }</li>);
+    }
+  };
+
   const titleStyle = !uname ?
     { background: 'grey', textAlign: 'center', margin: '0 auto', color: 'whitesmoke' } :
     { background: 'green', textAlign: 'center', margin: '0 auto', color: 'whitesmoke' };
@@ -78,11 +107,12 @@ const Chatting = () => {
             style={ titleStyle }
           >{ !uname ? 'Aguardando conexão com o servidor...'
             : `Conectado como ${uname}` }</h2>
+          <ul>Pessoas Conectadas: { theConnected() }</ul>
           <Paper
             id='msg-box'
             className='message-box'
             elevation={ 3 }
-          />
+          >{ dbMessages() }</Paper>
         </Paper>
       </Box>
       <TextField
@@ -94,7 +124,8 @@ const Chatting = () => {
       </TextField>
       <Button variant='contained'
         onClick={ generateLi }>ENVIAR</Button>
-        <Button onClick={() => socket.emit('resetDB')}>RESET DB</Button>
+      <Button onClick={ () => socket.emit('resetDB') }>RESET DB</Button>
+      <button type='button' onClick={ () => console.log(allConnected) }>Messages Console</button>
     </section>);
 };
 
