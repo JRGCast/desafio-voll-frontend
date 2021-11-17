@@ -19,7 +19,7 @@ const Chatting = () => {
   const { username } = useParams();
 
   useEffect(() => {
-    socket = socketClient(localUrl);
+    socket = socketClient(EXTERNAL_SERVER);
     setSocketConnected(true);
   }, []);
 
@@ -44,6 +44,11 @@ const Chatting = () => {
     if (socketConnected) {
       socket.on('confirmInsert', (data) => console.log(data));
       socket.on('chatMessage', (message) => console.log(message));
+      socket.on('getAllConnected', (allConnected) => {
+        setAllConnected(allConnected);
+        theConnected();
+        console.log(allConnected);
+      });
     }
   }, [socketConnected]);
 
