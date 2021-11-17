@@ -26,7 +26,7 @@ const Chatting = () => {
   useEffect(() => {
     if (socketConnected) {
       socket.on('connection', () => {
-        socket.emit('setName', `${username}${socket.id.slice(0, 3)}`);
+        socket.emit('setName', username);
         socket.emit('getAllMessages');
         socket.emit('getAllConnected');
       });
@@ -54,11 +54,6 @@ const Chatting = () => {
         theConnected();
         console.log(socket.id, 'disconnected');
       });
-      // socket.on('getAllConnected', (allConnected) => {
-      //   setAllConnected(allConnected);
-      //   theConnected();
-      //   console.log(allConnected);
-      // });
     }
   }, [socketConnected, theConnected]);
 
