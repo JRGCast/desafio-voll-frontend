@@ -15,11 +15,11 @@ const Chatting = () => {
   const [allConnected, setAllConnected] = useState([]);
   const [uname, setUname] = useState('');
   const dateTimeRef = useRef(null);
-console.log(localUrl)
+  console.log(localUrl);
   const { username } = useParams();
 
   useEffect(() => {
-    socket = socketClient(EXTERNAL_SERVER);
+    socket = socketClient(localUrl);
     setSocketConnected(true);
   }, []);
 
@@ -29,7 +29,6 @@ console.log(localUrl)
         socket.emit('setName', `${username}${socket.id.slice(0, 3)}`);
         socket.emit('getAllMessages');
         socket.emit('getAllConnected');
-        socket.on('disconnect', () => console.log(socket.id, 'disconnected'));
       });
       socket.on('setName', (pongname) => setUname(pongname));
       socket.on('getAllMessages', (allMessages) => setAllMessages(allMessages));
@@ -50,11 +49,16 @@ console.log(localUrl)
     if (socketConnected) {
       socket.on('confirmInsert', (data) => console.log(data));
       socket.on('chatMessage', (message) => console.log(message));
-      socket.on('getAllConnected', (allConnected) => {
+      socket.on('disconnect', (allConnected) => {
         setAllConnected(allConnected);
         theConnected();
-        console.log(allConnected);
+        console.log(socket.id, 'disconnected');
       });
+      // socket.on('getAllConnected', (allConnected) => {
+      //   setAllConnected(allConnected);
+      //   theConnected();
+      //   console.log(allConnected);
+      // });
     }
   }, [socketConnected, theConnected]);
 
