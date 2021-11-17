@@ -29,10 +29,14 @@ const Chatting = () => {
         socket.emit('setName', `${username}${socket.id.slice(0, 3)}`);
         socket.emit('getAllMessages');
         socket.emit('getAllConnected');
+        socket.on('disconnect', () => console.log(socket.id, 'disconnected'));
       });
       socket.on('setName', (pongname) => setUname(pongname));
       socket.on('getAllMessages', (allMessages) => setAllMessages(allMessages));
-      socket.on('getAllConnected', (allConnected) => setAllConnected(allConnected));
+      socket.on('getAllConnected', (allConnected) => {
+        setAllConnected(allConnected);
+        console.log(allConnected);
+      });
     }
   }, [socketConnected, username]);
 
@@ -41,7 +45,7 @@ const Chatting = () => {
       socket.on('confirmInsert', (data) => console.log(data));
       socket.on('chatMessage', (message) => console.log(message));
     }
-  });
+  }, [socketConnected]);
 
   useEffect(() => {
     if (socketConnected) {
@@ -53,7 +57,8 @@ const Chatting = () => {
         msgBox.appendChild(newMsg);
       });
     }
-  }, [socketConnected, allMessages]);
+  }, [socketConnected]);
+
 
   useEffect(() => {
     const secondsTimer = setInterval(() => {
@@ -71,11 +76,11 @@ const Chatting = () => {
     const msgBox = document.getElementById('msg-box');
     const newMsg = document.createElement('li');
     const fullMessage = `${uname} (${dateTimeRef.current.innerText}) disse: ${msgInput.value}`;
-    socket.emit('newMessage', fullMessage);
     newMsg.appendChild(document.createTextNode(fullMessage));
     msgBox.appendChild(newMsg);
     msgInput.value = '';
     msgInput.scrollIntoView();
+    socket.emit('newMessage', fullMessage);
   };
 
   const inputKeyPress = (e) => {
@@ -107,7 +112,7 @@ const Chatting = () => {
             style={ titleStyle }
           >{ !uname ? 'Aguardando conexão com o servidor...'
             : `Conectado como ${uname}` }</h2>
-          <ul>Pessoas Conectadas: { theConnected() }</ul>
+          <ul ref={ useRef() }>Pessoas Conectadas: { theConnected() }</ul>
           <Paper
             id='msg-box'
             className='message-box'
