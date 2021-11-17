@@ -1,5 +1,5 @@
 import { Box, Button, Paper, TextField } from "@material-ui/core";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import socketClient from 'socket.io-client';
 import './Chatting.css';
@@ -15,7 +15,7 @@ const Chatting = () => {
   const [allConnected, setAllConnected] = useState([]);
   const [uname, setUname] = useState('');
   const dateTimeRef = useRef(null);
-
+console.log(localUrl)
   const { username } = useParams();
 
   useEffect(() => {
@@ -40,6 +40,12 @@ const Chatting = () => {
     }
   }, [socketConnected, username]);
 
+  const theConnected = useCallback(() => {
+    if (allConnected.length > 0) {
+      return allConnected.map(({ givenName }, index) => <li key={ index }>{ givenName }</li>);
+    }
+  }, [allConnected]);
+
   useEffect(() => {
     if (socketConnected) {
       socket.on('confirmInsert', (data) => console.log(data));
@@ -50,7 +56,7 @@ const Chatting = () => {
         console.log(allConnected);
       });
     }
-  }, [socketConnected]);
+  }, [socketConnected, theConnected]);
 
   useEffect(() => {
     if (socketConnected) {
@@ -95,12 +101,6 @@ const Chatting = () => {
   const dbMessages = () => {
     if (allMessages.length > 0) {
       return allMessages.map(({ message }, index) => <li key={ index }>{ message }</li>);
-    }
-  };
-
-  const theConnected = () => {
-    if (allConnected.length > 0) {
-      return allConnected.map(({ givenName }, index) => <li key={ index }>{ givenName }</li>);
     }
   };
 
